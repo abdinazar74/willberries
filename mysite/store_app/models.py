@@ -48,13 +48,13 @@ class Product(models.Model):
     product_type = models.BooleanField(default=False)
     product_video = models.FileField(upload_to='product_videos/', null=True, blank=True)
     price = models.PositiveIntegerField()
-    cteated_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.product_name
 
 class ProductImage(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_photos')
     product_image =models.ImageField(upload_to='product_images/')
 
     def __str__(self):
@@ -64,11 +64,13 @@ class ProductImage(models.Model):
 
 class Reviews(models.Model):
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_review')
     text = models.TextField()
     stars = models.PositiveSmallIntegerField(choices=[(i, str(i))for i in range(1, 6)])
     created_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.author}'
 
 class Cart(models.Model):
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)

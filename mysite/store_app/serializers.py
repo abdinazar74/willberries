@@ -10,27 +10,52 @@ class CategorySerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = '__all__'
+        fields = ['first_name', 'last_name']
 
 class SubcategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subcategories
-        fields = '__all__'
-
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = '__all__'
+        fields = ['subcategories_name']
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        fields = '__all__'
+        fields = ['product_image']
+
+class ProductListSerializer(serializers.ModelSerializer):
+    category = SubcategoriesSerializer()
+    created_date = serializers.DateTimeField(format('%d-%m-%y %H:%M'))
+    owner = OwnerSerializer()
+    product_photos = ProductImageSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Product
+        fields = ['id', 'product_name', 'product_photos', 'category', 'price',
+                  'created_date', 'product_type', 'owner']
 
 class ReviewsSerializer(serializers.ModelSerializer):
+    created_date = serializers.DateTimeField(format='%d-%m-%y %H:%M')
+    author = UserProfileSerializer()
+
     class Meta:
         model = Reviews
-        fields = '__all__'
+        fields = ['author', 'text', 'stars', 'created_date']
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    category = SubcategoriesSerializer()
+    created_date = serializers.DateTimeField(format('%d-%m-%y %H:%M'))
+    owner = UserProfileSerializer()
+    product_photos = ProductImageSerializer(read_only=True, many=True)
+    product_review = ReviewsSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Product
+        fields = ['id', 'product_name', 'product_video','product_photos', 'category', 'price',
+                  'created_date', 'product_type','article_number', 'description','owner','product_review']
+
+
+
+
 
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
