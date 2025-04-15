@@ -1,14 +1,19 @@
 from .models import *
 from rest_framework import viewsets, generics
 from .serializers import (
-    UserProfileSerializer,CategorySerializer, SubcategoriesSerializer, ProductDetailSerializer,ProductListSerializer,
+    UserProfileSerializer,CategoryListSerializer, SubcategoriesListSerializer, CategoryDetailSerializer,
+    ProductDetailSerializer,ProductListSerializer,SubcategoriesDetailSerializer,ProductSerializer,
     ReviewsSerializer, CartSerializer, CartItemSerializer, FavoriteSerializer, FavoriteItemSerializer, ProductImageSerializer
 )
 
 
-class CategoryViewSets(viewsets.ModelViewSet):
+class CategoryListAPIViews(generics.ListAPIView):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    serializer_class = CategoryListSerializer
+
+class CategoryDetailAPIViews(generics.RetrieveAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryDetailSerializer
 
 class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
@@ -18,13 +23,27 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
 
+class ProductEditAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+class ProductCreateAPIView(generics.CreateAPIView):
+    serializer_class = ProductSerializer
+
 class UserProfileViewSets(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
-    serializer_class = CategorySerializer
+    serializer_class = UserProfileSerializer
 
-class SubcategoriesViewSets(viewsets.ModelViewSet):
+    def get_queryset(self):
+        return UserProfile.objects.filter(id=self.request.user.id)
+
+class SubcategoriesListAPIView(generics.ListAPIView):
     queryset = Subcategories.objects.all()
-    serializer_class = SubcategoriesSerializer
+    serializer_class = SubcategoriesListSerializer
+
+class SubcategoriesDetailAPIView(generics.RetrieveAPIView):
+    queryset = Subcategories.objects.all()
+    serializer_class = SubcategoriesDetailSerializer
 
 class ProductImageViewSets(viewsets.ModelViewSet):
     queryset = ProductImage.objects.all()
