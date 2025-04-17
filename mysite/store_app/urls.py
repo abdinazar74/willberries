@@ -4,7 +4,7 @@ from django.urls import path, include
 from .views import (
     UserProfileViewSets, CategoryListAPIViews,
     SubcategoriesListAPIView, SubcategoriesDetailAPIView, CategoryDetailAPIViews,
-    ProductListAPIView, ProductDetailAPIView, ProductDetailAPIView,
+    ProductListAPIView, ProductDetailAPIView, ProductDetailAPIView,RegisterView,CustomLoginView,LogoutView,
     ReviewsViewSets, CartViewSets, CartItemViewSets,ProductEditAPIView,
     FavoriteViewSets, FavoriteItemViewSets, ProductCreateAPIView
 )
@@ -17,6 +17,9 @@ router.register(r'users', UserProfileViewSets, basename='users' )
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('products/', ProductListAPIView.as_view(), name='product-list'),
     path('products/<int:pk>/', ProductDetailAPIView.as_view(), name='product-detail'),
     path('products/create/', ProductCreateAPIView.as_view(), name='product_create'),
