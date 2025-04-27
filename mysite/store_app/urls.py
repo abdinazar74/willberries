@@ -28,5 +28,8 @@ urlpatterns = [
     path('category/<int:pk>/', CategoryDetailAPIViews.as_view(), name='category_detail'),
     path('sub-category/', SubcategoriesListAPIView.as_view(), name='sub_category_list'),
     path('sub-category/<int:pk>/', SubcategoriesDetailAPIView.as_view(), name='sub_category_detail'),
+    path('cart/', CartViewSets.as_view(), name='cart_detail'),
+    path('cart_items/', CartItemViewSets.as_view({'get': 'list', 'post': 'create'} )),
+    path('cart_items/<int:pk>', CartItemViewSets.as_view({'put': 'update', 'delete': 'destroy'})),
 
 ]
